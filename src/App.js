@@ -22,7 +22,7 @@ function App() {
   const handleSubmit = async e => {
     //e.preventDefault();
     await axios
-      .post('http://localhost:1337/api/add-task', {
+      .post('http://todo-server-production-e8c2.up.railway.app/api/add-task', {
         task: todo,
       })
       .then(response => {
@@ -32,7 +32,9 @@ function App() {
   };
 
   const FetchData = async () => {
-    const data = await axios.get('http://localhost:1337/api/get-all');
+    const data = await axios.get(
+      'http://todo-server-production-e8c2.up.railway.app/api/get-all'
+    );
     console.log(data.data);
     setTodos(data.data);
   };
