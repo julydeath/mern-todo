@@ -1,40 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
+  Button,
   theme,
+  Input,
+  Flex,
+  Card,
+  CardBody,
+  Text,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
+import { DeleteIcon } from '@chakra-ui/icons';
+import axios from 'axios';
 
 function App() {
+  const [todo, setTodo] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const handleSubmit = async e => {
+    //e.preventDefault();
+    await axios
+      .post('http://localhost:1337/api/add-task', {
+        task: todo,
+      })
+      .then(response => {
+        console.log(response);
+      });
+    setTodo('');
+  };
+
+  const FetchData = async () => {
+    const data = await axios.get('http://localhost:1337/api/get-all');
+    console.log(data.data);
+    setTodos(data.data);
+  };
+
+  useEffect(() => {
+    FetchData();
+  }, []);
+
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
+      <ColorModeSwitcher />
+      <form onSubmit={e => handleSubmit(e)}>
+        <Flex>
+          <Input
+            focusBorderColor="lime"
+            placeholder="Enter ToDo"
+            type="text"
+            value={todo}
+            onChange={e => setTodo(e.target.value)}
+          />
+          <Button colorScheme="green" onClick={e => handleSubmit(e)}>
+            ADD
+          </Button>
+        </Flex>
+      </form>
+      {todos.map(list => (
+        <Card key={list.id}>
+          <CardBody>
+            <Flex>
+              <Text>{list.task}</Text>
+              <DeleteIcon />
+            </Flex>
+          </CardBody>
+        </Card>
+      ))}
     </ChakraProvider>
   );
 }
