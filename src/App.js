@@ -8,6 +8,8 @@ import {
   Card,
   CardBody,
   Text,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { DeleteIcon } from '@chakra-ui/icons';
