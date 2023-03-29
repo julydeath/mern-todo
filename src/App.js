@@ -8,12 +8,11 @@ import {
   Card,
   CardBody,
   Text,
-  Alert,
-  AlertIcon,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { DeleteIcon } from '@chakra-ui/icons';
 import axios from 'axios';
+import './axios/global';
 
 function App() {
   const [todo, setTodo] = useState('');
@@ -22,7 +21,7 @@ function App() {
   const handleSubmit = async e => {
     //e.preventDefault();
     await axios
-      .post('http://todo-server-production-e8c2.up.railway.app/api/add-task', {
+      .post('/api/add-task', {
         task: todo,
       })
       .then(response => {
@@ -32,9 +31,7 @@ function App() {
   };
 
   const FetchData = async () => {
-    const data = await axios.get(
-      'http://todo-server-production-e8c2.up.railway.app/api/get-all'
-    );
+    const data = await axios.get('/api/get-all');
     console.log(data.data);
     setTodos(data.data);
   };
